@@ -4,6 +4,7 @@ import { Product } from '../../src/entities/product.entity';
 
 @Injectable()
 export class ProductsService {
+    private productId = 1;
     private products: Product[] = [{
         id: 1,
         name: "Lampara",
@@ -12,6 +13,10 @@ export class ProductsService {
         stock: 20,
         image: ""
     }]
+
+    newId() {
+        this.productId = this.productId + 1;
+    }
 
     findAll() {
         return this.products;
@@ -22,9 +27,9 @@ export class ProductsService {
     }
 
     create(payload: CreateProductDto) {
-        const id = 2;
+        this.newId();
         const newProduct = {
-            id,
+            id: this.productId,
             ...payload
         };
         this.products.push(newProduct);
