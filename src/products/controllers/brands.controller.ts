@@ -7,29 +7,26 @@ export class BrandsController {
 
     @Get()
     getBrands() {
-        return "All brands";
+        return this.brandsService.getAll();
     }
 
     @Get(":id")
     getBrand(@Param("id", ParseIntPipe) brandId: number) {
-        return `Brand ${brandId}`;
+        return this.brandsService.getOne(brandId);
     }
 
     @Post()
     createBrand(@Body() body: any) {
-        return `${body}`;
+        return this.brandsService.create(body);
     }
 
     @Put(":id")
     updateBrand(@Param("id", ParseIntPipe) brandId: number, @Body() body: any) {
-        return {
-            brandId,
-            body
-        }
+        return this.brandsService.update(brandId, body);
     }
 
     @Delete(":id")
     deleteBrand(@Param("id", ParseIntPipe) brandId: number) {
-        return `Brand ${brandId} updated`
+        return this.brandsService.delete(brandId);
     }
 }

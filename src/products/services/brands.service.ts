@@ -29,13 +29,19 @@ export class BrandsService {
             id: this.brandId,
             ...data
         };
-
+        this.brands.push(brand);
         return brand;
     };
 
     update(id: number, data: any) {
         const indexBrand = this.brands.findIndex(brand => brand.id === id);
-        
+        const brand = this.brands[indexBrand];
+        const updatedBrand = {
+            ...brand,
+            ...data
+        }
+        this.brands[indexBrand] = updatedBrand;
+        return this.brands[indexBrand];
     };
 
     delete(id: number) {
