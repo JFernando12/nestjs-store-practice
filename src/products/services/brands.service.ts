@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dtos';
+import { Brand } from '../entities/brand.entity';
 
 @Injectable()
 export class BrandsService {
-    private brandId = 1;
-    private brands = [
+    private brandId: number = 1;
+    private brands: Brand[] = [
         {
             id: 1,
             name: "Brand 1",
-            iamge: "https://algo.png"
+            image: "https://algo.png"
         }
     ]
 
@@ -15,15 +17,15 @@ export class BrandsService {
         this.brandId = this.brandId + 1;
     }
 
-    getAll() {
+    getAll(): Brand[] {
         return this.brands;
     }
 
-    getOne(id: number) {
+    getOne(id: number): Brand {
         return this.brands.find(brand => brand.id === id);
     };
 
-    create(data: any) {
+    create(data: CreateBrandDto) {
         this.newID();
         const brand = {
             id: this.brandId,
@@ -33,7 +35,7 @@ export class BrandsService {
         return brand;
     };
 
-    update(id: number, data: any) {
+    update(id: number, data: UpdateBrandDto) {
         const indexBrand = this.brands.findIndex(brand => brand.id === id);
         const brand = this.brands[indexBrand];
         const updatedBrand = {
