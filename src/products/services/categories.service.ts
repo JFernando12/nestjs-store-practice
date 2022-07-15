@@ -47,6 +47,7 @@ export class CategoriesService {
     }
 
     delete(id: number) {
-        return this.categories.filter(categorie => categorie.id !== id);
+        this.categories = this.categories.filter(categorie => categorie.id !== id);
+        return `Category ${id} elimated`;
     }
 }
