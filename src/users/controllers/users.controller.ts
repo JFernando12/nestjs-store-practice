@@ -33,4 +33,9 @@ export class UsersController {
         return this.usersService.delete(userId);
     }
 
+    @Get(":id/order")
+    getOrder(@Param("id", ParseIntPipe) userId: number) {
+        return this.usersService.getOrderById(userId);
+    }
+
 }
