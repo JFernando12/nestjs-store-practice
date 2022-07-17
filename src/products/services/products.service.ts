@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from 'src/products/dtos/product.dtos';
 import { Product } from '../entities/product.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ProductsService {
@@ -14,11 +15,15 @@ export class ProductsService {
         image: ""
     }]
 
+    constructor(private configService: ConfigService) {}
+
     newId() {
         this.productId = this.productId + 1;
     }
 
     findAll() {
+        console.log(this.configService.get("API_KEY"));
+        console.log(this.configService.get("DATABASE_NAME"));
         return this.products;
     }
 
