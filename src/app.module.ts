@@ -8,11 +8,13 @@ import { firstValueFrom } from 'rxjs';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { enviaroments } from 'envairoments';
+import config from './config';
 
 @Module({
   imports: [ConfigModule.forRoot({
-    envFilePath: enviaroments[process.env.ENTORNO],
-    isGlobal: true
+    envFilePath: enviaroments[process.env.ENTORNO] || ".env",
+    isGlobal: true,
+    load: [config]
   }), ProductsModule, UsersModule, HttpModule, DatabaseModule],
   controllers: [AppController],
   providers: [
