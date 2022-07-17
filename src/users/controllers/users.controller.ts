@@ -1,19 +1,23 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from '../dtos/user.dtos';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { User } from '../entities/user.entity';
 import { UsersService } from '../services/users.service';
 
+@ApiTags("Users")
 @Controller('users')
 export class UsersController {
 
     constructor(private usersService: UsersService) {}
 
     @Get()
+    @ApiOperation({summary: "Get all users"})
     getUsers(): User[] {
         return this.usersService.getAll();
     }
 
     @Get(":id")
+    @ApiOperation({summary: "Create new user"})
     getUser(@Param("id", ParseIntPipe) userId: number): User {
         return this.usersService.getOne(userId);
     }
