@@ -7,10 +7,11 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import { enviaroments } from 'envairoments';
 
 @Module({
   imports: [ConfigModule.forRoot({
-    envFilePath: ".env",
+    envFilePath: enviaroments[process.env.ENTORNO],
     isGlobal: true
   }), ProductsModule, UsersModule, HttpModule, DatabaseModule],
   controllers: [AppController],
