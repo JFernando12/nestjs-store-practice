@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import Joi from 'joi';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { enviaroments } from 'envairoments';
@@ -14,7 +15,12 @@ import config from './config';
   imports: [ConfigModule.forRoot({
     envFilePath: enviaroments[process.env.ENTORNO] || ".env",
     isGlobal: true,
-    load: [config]
+    load: [config],
+    validationSchema: Joi.object({
+      API_KEY: Joi.string().required(),
+      DATABASE_NAME: Joi.string().required(),
+      PORT: Joi.number().required()
+    })
   }), ProductsModule, UsersModule, HttpModule, DatabaseModule],
   controllers: [AppController],
   providers: [
