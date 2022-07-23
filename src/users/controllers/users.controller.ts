@@ -11,7 +11,7 @@ export class UsersController {
     constructor(private usersService: UsersService) {}
 
     @Get()
-    @ApiOperation({summary: "Get all users"})
+    @ApiOperation({summary: "Get all user"})
     getUsers(): User[] {
         return this.usersService.getAll();
     }
