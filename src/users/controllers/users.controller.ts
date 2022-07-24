@@ -16,6 +16,11 @@ export class UsersController {
         return this.usersService.getAll();
     }
 
+    @Get('tasks')
+    getTasks(): any {
+        return this.usersService.getTasks();
+    }
+
     @Get(":id")
     @ApiOperation({summary: "Create new user"})
     getUser(@Param("id", ParseIntPipe) userId: number): User {

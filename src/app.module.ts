@@ -1,19 +1,20 @@
+import Joi from 'joi';
+import { firstValueFrom } from 'rxjs';
+import { HttpModule, HttpService } from '@nestjs/axios';
+
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
-import { HttpModule, HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
-import Joi from 'joi';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { enviaroments } from 'envairoments';
+import { envairoments } from 'envairoments';
 import config from './config';
 
 @Module({
   imports: [ConfigModule.forRoot({
-    envFilePath: enviaroments[process.env.ENTORNO] || ".env",
+    envFilePath: envairoments[process.env.ENTORNO] || ".env",
     isGlobal: true,
     load: [config],
     validationSchema: Joi.object({

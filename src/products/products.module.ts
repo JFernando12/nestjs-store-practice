@@ -5,8 +5,11 @@ import { CategoriesService } from './services/categories.service';
 import { ProductsController } from './controllers/products.controller';
 import { BrandsController } from './controllers/brands.controller';
 import { CategoriesController } from './controllers/categories.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Product } from './entities/product.entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Product])],
   controllers: [ProductsController, BrandsController, CategoriesController],
   providers: [ProductsService ,BrandsService, CategoriesService],
   exports: [ProductsService]
