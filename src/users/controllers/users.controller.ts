@@ -12,7 +12,7 @@ export class UsersController {
 
     @Get()
     @ApiOperation({summary: "Get all user"})
-    getUsers(): User[] {
+    getUsers(): Promise<User[]> {
         return this.usersService.getAll();
     }
 
@@ -22,8 +22,8 @@ export class UsersController {
     }
 
     @Get(":id")
-    @ApiOperation({summary: "Create new user"})
-    getUser(@Param("id", ParseIntPipe) userId: number): User {
+    @ApiOperation({summary: "Get one user"})
+    getUser(@Param("id", ParseIntPipe) userId: number): Promise<User> {
         return this.usersService.getOne(userId);
     }
 

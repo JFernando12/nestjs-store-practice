@@ -1,54 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dto';
 import { Brand } from '../entities/brand.entity';
 
 @Injectable()
 export class BrandsService {
-    private brandId: number = 1;
-    private brands: Brand[] = [
-        {
-            id: 1,
-            name: "Brand 1",
-            image: "https://algo.png"
-        }
-    ]
 
-    newID() {
-        this.brandId = this.brandId + 1;
+    constructor(@InjectRepository(Brand) private brandRepo: Repository<Brand>) {}
+
+    async getAll(): Promise<Brand[]> {
+        return await this.brandRepo.find();
     }
 
-    getAll(): Brand[] {
-        return this.brands;
-    }
-
-    getOne(id: number): Brand {
-        return this.brands.find(brand => brand.id === id);
-    };
-
-    create(data: CreateBrandDto) {
-        this.newID();
-        const brand = {
-            id: this.brandId,
-            ...data
-        };
-        this.brands.push(brand);
-        return brand;
-    };
-
-    update(id: number, data: UpdateBrandDto) {
-        const indexBrand = this.brands.findIndex(brand => brand.id === id);
-        const brand = this.brands[indexBrand];
-        const updatedBrand = {
-            ...brand,
-            ...data
+    async getOne(id: number): Promise<Brand> {
+        const brand = await this.brandRepo.findOneBy({ id });
+        if(!brand){
+            throw new NotFoundException(`Brand #${id} not found`);
         }
-        this.brands[indexBrand] = updatedBrand;
-        return this.brands[indexBrand];
+        return brand; 
+    };
+
+    async create(data: CreateBrandDto) {
+        const newBrand = this.brandRepo.create(data);
+        return await this.brandRepo.save(newBrand);
+    };
+
+    async update(id: number, data: UpdateBrandDto) {
+        const brand = await this.brandRepo.findOneBy({ id });
+        this.brandRepo.merge(brand, data);
+        return await this.brandRepo.save(brand)
     };
 
     delete(id: number) {
-        this.brands = this.brands.filter(brand => brand.id !== id);
-        return this.brands;
+        return this.brandRepo.delete({ id });
     }
 
 }

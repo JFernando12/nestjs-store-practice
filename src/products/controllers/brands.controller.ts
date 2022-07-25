@@ -10,12 +10,12 @@ export class BrandsController {
     constructor(private readonly brandsService: BrandsService) {}
 
     @Get()
-    getBrands(): Brand[] {
+    getBrands(): Promise<Brand[]> {
         return this.brandsService.getAll();
     }
 
     @Get(":id")
-    getBrand(@Param("id", ParseIntPipe) brandId: number): Brand {
+    getBrand(@Param("id", ParseIntPipe) brandId: number): Promise<Brand> {
         return this.brandsService.getOne(brandId);
     }
 

@@ -1,16 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { Order } from '../entities/order.entity';
 import { User } from '../entities/user.entity';
 import { ProductsService } from 'src/products/services/products.service';
 import { Client } from 'pg';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
 
     constructor( 
         private productsService: ProductsService,
-        @Inject('PG') private clientPg: Client 
+        @Inject('PG') private clientPg: Client,
+        @InjectRepository(User) private userRepo: Repository<User>
         ) {}
 
     private userId = 1;
@@ -27,12 +30,16 @@ export class UsersService {
         this.userId = this.userId + 1;
     };
 
-    getAll(): User[] {
-        return this.users;
+    async getAll(): Promise<User[]> {
+        return await this.userRepo.find();
     };
 
-    getOne(id: number): User {
-        return this.users.find(user => user.id === id);
+    async getOne(id: number): Promise<User> {
+        const user = await this.userRepo.findOneBy({ id });
+        if(!user) {
+            throw new NotFoundException(`User #${id} not found`);
+        }
+        return user;
     };
 
     create(data: CreateUserDto) {
@@ -63,7 +70,7 @@ export class UsersService {
     };
 
     async getOrderById(id: number): Promise<Order> {
-        const user = this.getOne(id);
+        const user = this.userRepo.findOneBy({ id });
         return {
             date: new Date(),
             user,

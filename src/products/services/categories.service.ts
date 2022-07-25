@@ -1,53 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dto';
 import { Category } from '../entities/category.entity';
 
 @Injectable()
 export class CategoriesService {
-    private categoryId = 1;
-    private categories = [
-        {
-            id: 1,   
-            name: "Categorie 1"
+
+    constructor(@InjectRepository(Category) private categoryRepo: Repository<Category>) {}
+
+    async getAll(): Promise<Category[]> {
+        return await this.categoryRepo.find();
+    };
+
+    async getOne(id: number): Promise<Category> {
+        const category = await this.categoryRepo.findOneBy({ id });
+        if(!category) {
+            throw new NotFoundException(`Category #${id} not found`)
         }
-    ];
-
-    newId() {
-        this.categoryId = this.categoryId + 1;
+        return category;
     };
 
-    getAll(): Category[] {
-        return this.categories;
+    async create(data: CreateCategoryDto): Promise<Category> {
+        const newCategory = this.categoryRepo.create(data);
+        return await this.categoryRepo.save(newCategory);
     };
 
-    getOne(id: number): Category {
-        return this.categories.find(categorie => categorie.id === id);
-    };
-
-    create(data: CreateCategoryDto): Category {
-        this.newId();
-        const categorie = {
-            id: this.categoryId,
-            ...data
-        }
-        this.categories.push(categorie);
-
-        return categorie;
-    };
-
-    update(id: number, data: UpdateCategoryDto): Category {
-        const categorieIndex = this.categories.findIndex(categorie => categorie.id === id);
-        const categorie = this.categories[categorieIndex];
-        const newCategorie = {
-            ...categorie,
-            ...data
-        }
-        this.categories[categorieIndex] = newCategorie;
-        return newCategorie;
+    async update(id: number, data: UpdateCategoryDto): Promise<Category> {
+        const product = await this.categoryRepo.findOneBy({ id });
+        this.categoryRepo.merge(product, data);
+        return await this.categoryRepo.save(product);
     }
 
-    delete(id: number) {
-        this.categories = this.categories.filter(categorie => categorie.id !== id);
-        return `Category ${id} elimated`;
+    async delete(id: number) {
+        return await this.categoryRepo.delete({ id });
     }
 }

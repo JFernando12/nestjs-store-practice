@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateCustomerDto } from '../dtos/customer.dto';
+import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customer.dto';
 import { Customer } from '../entities/customer.entity';
 import { CustomersService } from '../services/customers.service';
 
@@ -10,22 +10,22 @@ export class CustomersController {
     constructor(private customersService: CustomersService) {}
 
     @Get()
-    getCustomers(): Customer[] {
+    getCustomers(): Promise<Customer[]> {
         return this.customersService.getAll();
     }
 
     @Get(":id")
-    getCustomer(@Param("id", ParseIntPipe) customerId: number): Customer {
+    getCustomer(@Param("id", ParseIntPipe) customerId: number): Promise<Customer> {
         return this.customersService.getOne(customerId);
     }
 
     @Post()
-    createCustomer(@Body() body: CreateCustomerDto): Customer {
+    createCustomer(@Body() body: CreateCustomerDto): Promise<Customer> {
         return this.customersService.create(body);
     }
 
     @Put(":id")
-    updateCustomer(@Param("id", ParseIntPipe) customerId: number, @Body() body: any): Customer {
+    updateCustomer(@Param("id", ParseIntPipe) customerId: number, @Body() body: UpdateCustomerDto) {
         return this.customersService.update(customerId, body);
     }
 

@@ -11,12 +11,12 @@ export class CategoriesController {
     constructor(private categoriesService: CategoriesService) {}
 
     @Get()
-    getCategories(): Category[] {
+    getCategories() {
         return this.categoriesService.getAll();
     }
 
     @Get(":id")
-    getCategory(@Param("id", ParseIntPipe) categoryId: number): Category {
+    getCategory(@Param("id", ParseIntPipe) categoryId: number): Promise<Category> {
         return this.categoriesService.getOne(categoryId);
     }
 

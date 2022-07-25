@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProductDto } from 'src/products/dtos/product.dto';
+import { CreateProductDto, UpdateProductDto } from 'src/products/dtos/product.dto';
 import { Product } from '../entities/product.entity';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,8 +24,8 @@ export class ProductsService {
     findAll(){
         return this.productRepo.find();
     }
-    findOne(id: number) {
-        const product = this.productRepo.findOneBy({ id: id});
+    async findOne(id: number) {
+        const product = await this.productRepo.findOneBy({ id: id});
         if(!product) {
             throw new NotFoundException(`Product #${id} not found`)
         }
@@ -62,6 +62,17 @@ export class ProductsService {
     //     return newProduct;
     // }
 
+    create(data: CreateProductDto) {
+        // const newProduct = new Product;
+        // newProduct.name = data.name;
+        // newProduct.description = data.description;
+        // newProduct.price = data.price;
+        // newProduct.stock = data.stock;
+        // newProduct.image = data.image;
+        const newProduct = this.productRepo.create(data);
+        return this.productRepo.save(newProduct);
+    }
+
     // update(id: number, payload) {
     //     const index = this.products.findIndex(product => product.id === id);
     //     const product = this.products.find(product => product.id === id);
@@ -73,9 +84,19 @@ export class ProductsService {
     //     return newProduct;
     // }
 
+    async update(id: number, payload: UpdateProductDto) {
+        const product = await this.productRepo.findOneBy({ id });
+        this.productRepo.merge(product, payload);
+        return this.productRepo.save(product);
+    }
+
     // delete(id: number) {
     //     this.products = this.products.filter(product => product.id !== id);
     //     return `Producto ${id} eliminado`
     // }
+
+    delete(id: number) {
+        return this.productRepo.delete( { id } )
+    }
 
 }
