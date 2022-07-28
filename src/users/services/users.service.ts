@@ -42,35 +42,23 @@ export class UsersService {
         return user;
     };
 
-    create(data: CreateUserDto) {
-        this.newId();
-        const user = {
-            id: this.userId,
-            ...data
-        }
-        this.users.push(user);
-        return user;
+    async create(data: CreateUserDto) {
+        const newUser = this.userRepo.create(data);
+        return await this.userRepo.save(newUser);
     };
 
-    update(id: number, data: UpdateUserDto) {
-        const userIndex = this.users.findIndex(user => user.id === id);
-        const user = this.users[userIndex];
-        const newUser = {
-            ...user,
-            ...data
-        }
-        this.users[userIndex] = newUser;
-
-        return newUser;
+    async update(id: number, data: UpdateUserDto) {
+        const user = await this.userRepo.findOneBy({ id });
+        this.userRepo.merge(user, data);
+        return await this.userRepo.save(user);
     }
 
-    delete(id: number) {
-        this.users = this.users.filter(user => user.id !== id);
-        return `User ${id} eliminated`;
+    async delete(id: number) {
+        return await this.userRepo.delete({ id });
     };
 
     async getOrderById(id: number): Promise<Order> {
-        const user = this.userRepo.findOneBy({ id });
+        const user = await this.userRepo.findOneBy({ id });
         return {
             date: new Date(),
             user,

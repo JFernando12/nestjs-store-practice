@@ -9,12 +9,12 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { envairoments } from 'envairoments';
+import { enviroments } from 'enviroments';
 import config from './config';
 
 @Module({
   imports: [ConfigModule.forRoot({
-    envFilePath: envairoments[process.env.ENTORNO] || ".env",
+    envFilePath: enviroments[process.env.ENTORNO] || ".env",
     isGlobal: true,
     load: [config],
     validationSchema: Joi.object({
