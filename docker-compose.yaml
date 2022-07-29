@@ -37,6 +37,6 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
       - PMA_HOST=mysql
     ports:
-      - '8080:80'
+      - '4008:80'
     depends_on:
       - mysql
