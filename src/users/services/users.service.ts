@@ -6,12 +6,14 @@ import { ProductsService } from 'src/products/services/products.service';
 import { Client } from 'pg';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CustomersService } from './customers.service';
 
 @Injectable()
 export class UsersService {
 
     constructor( 
         private productsService: ProductsService,
+        private customerService: CustomersService,
         @Inject('PG') private clientPg: Client,
         @InjectRepository(User) private userRepo: Repository<User>
         ) {}
@@ -44,6 +46,10 @@ export class UsersService {
 
     async create(data: CreateUserDto) {
         const newUser = this.userRepo.create(data);
+        if(data.customerId) {
+            const customer = await this.customerService.getOne(data.customerId);
+            newUser.customer = customer;
+        }
         return await this.userRepo.save(newUser);
     };
 
