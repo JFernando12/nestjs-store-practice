@@ -14,7 +14,7 @@ export class BrandsService {
     }
 
     async getOne(id: number): Promise<Brand> {
-        const brand = await this.brandRepo.findOneBy({ id });
+        const brand = await this.brandRepo.findOne({ where: { id }, relations: ['products'] });
         if(!brand){
             throw new NotFoundException(`Brand #${id} not found`);
         }
@@ -32,8 +32,8 @@ export class BrandsService {
         return await this.brandRepo.save(brand)
     };
 
-    delete(id: number) {
-        return this.brandRepo.delete({ id });
+    async delete(id: number) {
+        return await this.brandRepo.delete({ id });
     }
 
 }

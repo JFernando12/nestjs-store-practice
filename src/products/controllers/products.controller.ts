@@ -37,14 +37,6 @@ export class ProductsController {
     return this.productsService.create(body);
   }
 
-  // @Put(':id')
-  // updateProduct(
-  //   @Param('id', ParseIntPipe) productId: number,
-  //   @Body() body: UpdateProductDto,
-  // ) {
-  //   return this.productsService.update(productId, body);
-  // }
-
   @Put(':id')
   updateProduct(
     @Param('id', ParseIntPipe) productId: number,
@@ -53,13 +45,23 @@ export class ProductsController {
     return this.productsService.update(productId, body);
   }
 
-  // @Delete(':id')
-  // deleteProduct(@Param('id', ParseIntPipe) productId: number) {
-  //   return this.productsService.delete(productId);
-  // }
-
   @Delete(':id')
-  deleteProduct(@Param('id') productId: number) {
+  deleteProduct(@Param('id', ParseIntPipe) productId: number) {
     return this.productsService.delete(productId);
   }
+
+  @Delete(':id/category/:categoryId')
+  deleteCategoryByProduct(
+    @Param('id', ParseIntPipe) productId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number) {
+      return this.productsService.deleteCategoryByProduct(productId, categoryId);
+  }
+
+  @Put(':id/category/:categoryId')
+  addCategoryToProduct(
+    @Param('id', ParseIntPipe) productId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number) {
+      return this.productsService.addCategoryToProduct(productId, categoryId);
+  }
+
 }
