@@ -1,26 +1,33 @@
-import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Product } from './product.entity';
 
 @Entity()
 export class Category {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'varchar' })
-    name: string;
+  @Column({ type: 'varchar' })
+  name: string;
 
-    @CreateDateColumn({
-        type: 'timestamptz',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    createAt: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createAt: Date;
 
-    @UpdateDateColumn({
-        type: 'timestamptz',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    updateAt: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updateAt: Date;
 
-    @ManyToMany(() => Product, (product) => product.categories)
-    products: Product[];
+  @ManyToMany(() => Product, (product) => product.categories)
+  products: Product[];
 }

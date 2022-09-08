@@ -13,25 +13,33 @@ import { enviroments } from 'enviroments';
 import config from './config';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    envFilePath: enviroments[process.env.ENTORNO] || ".env",
-    isGlobal: true,
-    load: [config],
-    validationSchema: Joi.object({
-      API_KEY: Joi.string().required(),
-      DATABASE_NAME: Joi.string().required(),
-      PORT: Joi.number().required()
-    })
-  }), ProductsModule, UsersModule, HttpModule, DatabaseModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: enviroments[process.env.ENTORNO] || '.env',
+      isGlobal: true,
+      load: [config],
+      validationSchema: Joi.object({
+        API_KEY: Joi.string().required(),
+        DATABASE_NAME: Joi.string().required(),
+        PORT: Joi.number().required(),
+      }),
+    }),
+    ProductsModule,
+    UsersModule,
+    HttpModule,
+    DatabaseModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
-    { provide: 'TASKS', useFactory: async (http: HttpService) => {
+    {
+      provide: 'TASKS',
+      useFactory: async (http: HttpService) => {
         const response = http.get('https://jsonplaceholder.typicode.com/todos');
         const value = await firstValueFrom(response);
         return value.data;
       },
-      inject: [HttpService]
+      inject: [HttpService],
     },
   ],
 })

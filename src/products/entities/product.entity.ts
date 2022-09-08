@@ -1,43 +1,52 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Brand } from './brand.entity';
 import { Category } from './category.entity';
 
 @Entity()
 export class Product {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'varchar', length: 255, unique: true})
-    name: string;
+  @Column({ type: 'varchar', length: 255, unique: true })
+  name: string;
 
-    @Column({ type: 'text' })
-    description: string;
+  @Column({ type: 'text' })
+  description: string;
 
-    @Column({ type: 'int' })
-    price: number;
+  @Column({ type: 'int' })
+  price: number;
 
-    @Column({ type: 'int' })
-    stock: number;
+  @Column({ type: 'int' })
+  stock: number;
 
-    @Column({ type: 'varchar' })
-    image: string;
+  @Column({ type: 'varchar' })
+  image: string;
 
-    @CreateDateColumn({
-        type: 'timestamptz',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    createAt: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createAt: Date;
 
-    @UpdateDateColumn({
-        type: 'timestamptz',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    updateAt: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updateAt: Date;
 
-    @ManyToOne(() => Brand, (brand) => brand.products)
-    brand: Brand;
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand: Brand;
 
-    @ManyToMany(() => Category, (category) => category.products)
-    @JoinTable()
-    categories: Category[]
+  @ManyToMany(() => Category, (category) => category.products)
+  @JoinTable()
+  categories: Category[];
 }

@@ -13,7 +13,7 @@ import { Brand } from './entities/brand.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Product, Category, Brand])],
   controllers: [ProductsController, BrandsController, CategoriesController],
-  providers: [ProductsService ,BrandsService, CategoriesService],
-  exports: [ProductsService]
+  providers: [ProductsService, BrandsService, CategoriesService],
+  exports: [ProductsService],
 })
 export class ProductsModule {}
